@@ -7,14 +7,14 @@
         <td> Editar </td>
         <td> Deletar </td>
     </tr>
-    {{#each receitas}}
+    {{#each reservas}}
     <tr>
         <td>{{nome}}</td>
         <td>{{preparo}}</td>
         <td>{{ingredientes}}</td>
-        <td>{{categoriaId}}</td>
-        <td><a href="receitaUpdate/{{id}}">Editar</a></td>
-        <td><a href="receitaDelete/{{id}}">Deletar</a></td>
+        <td>{{espacoId}}</td>
+        <td><a href="reservaUpdate/{{id}}">Editar</a></td>
+        <td><a href="reservaDelete/{{id}}">Deletar</a></td>
     </tr>
     {{/each}}
 </table>

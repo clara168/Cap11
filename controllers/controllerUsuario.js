@@ -1,29 +1,21 @@
 const db = require('../config/db_sequelize');
-const path = require('path');
 
 module.exports = {
     async getLogin(req, res) {
         res.render('usuario/login', { layout: 'noMenu.handlebars' });
     },
     async postLogin(req, res) {
-        db.Usuario.findAll({ where: { login: req.body.login, senha: req.body.senha } }
-        ).then(usuarios => {
-            if (usuarios.length > 0) {
-                res.render('home');
-            } else
+        const { email, senha_hash } = req.body;
+        db.Usuario.findOne({ where: { email: email, senha_hash: senha_hash } })
+        .then(usuario => {
+            if (usuario) {
+                res.redirect('/home');
+            } else {
                 res.redirect('/');
-        }).catch((err) => {
+            }
+        }).catch(err => {
             console.log(err);
-        });
-    },
-    async getCreate(req, res) {
-        res.render('usuario/usuarioCreate');
-    },
-    async postCreate(req, res) {
-        db.Usuario.create(req.body).then(() => {
-            res.redirect('/home');
-        }).catch((err) => {
-            console.log(err);
+            res.redirect('/');
         });
     },
     async getList(req, res) {
@@ -33,25 +25,4 @@ module.exports = {
             console.log(err);
         });
     },
-    async getUpdate(req, res) {
-        await db.Usuario.findByPk(req.params.id).then(
-            usuario => res.render('usuario/usuarioUpdate', { usuario: usuario.dataValues })
-        ).catch(function (err) {
-            console.log(err);
-        });
-    },
-    async postUpdate(req, res) {
-        await db.Usuario.update(req.body, { where: { id: req.body.id } }).then(
-            res.render('home')
-        ).catch(function (err) {
-            console.log(err);
-        });
-    },
-    async getDelete(req, res) {
-        await db.Usuario.destroy({ where: { id: req.params.id } }).then(
-            res.render('home')
-        ).catch(err => {
-            console.log(err);
-        });
-    }
-}   
+}

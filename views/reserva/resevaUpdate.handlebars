@@ -1,5 +1,5 @@
-<form action="/receitaUpdate" method="post">
-    <input type="hidden" name="id" value={{receita.id}}>
+<form action="/reservaUpdate" method="post">
+    <input type="hidden" name="id" value={{reserva.id}}>
     Nome: <input type="text" name="nome"  value="{{receita.nome}}">
     <br> <br>
     Ingredientes: <input type="text" name="ingredientes"  value="{{receita.ingredientes}}">
@@ -7,8 +7,8 @@
     Preparo: <input type="text" name="preparo" value="{{receita.preparo}}">
     <br> <br>
     Ingredientes:
-    <select name="categoriaId">
-        {{#each categorias}}
+    <select name="espacoId">
+        {{#each espacos}}
         <tr>
             <option value={{id}}>{{nome}}</option>
         </tr>
