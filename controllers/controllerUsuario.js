@@ -1,8 +1,13 @@
 const db = require('../config/db_sequelize');
 
 module.exports = {
+    
     async getLogin(req, res) {
-        res.render('usuario/login', { layout: 'noMenu.handlebars' });
+        if (req.session.usuario) {
+            res.redirect('/home');
+        } else {
+            res.render('usuario/login', { layout: 'noMenu.handlebars' });
+        }
     },
 
     async postLogin(req, res) {
@@ -15,8 +20,7 @@ module.exports = {
                     nome: usuario.nome,
                     email: usuario.email
                 };
-                console.log('Sessão criada para o usuário:', req.session.usuario);
-                res.redirect('/home'); 
+                res.redirect('/home');
             } else {
                 res.redirect('/');
             }
@@ -26,16 +30,55 @@ module.exports = {
         });
     },
 
-    
     async getLogout(req, res) {
-        req.session.destroy(err => { 
-            if (err) {
-                return console.log(err);
-            }
-            console.log('Sessão destruída.');
-            res.redirect('/'); 
+        req.session.destroy(err => {
+            if (err) return console.log(err);
+            res.redirect('/');
         });
     },
 
+    
+    async getCreate(req, res) {
+        res.render('usuario/usuarioCreate');
+    },
 
+    async postCreate(req, res) {
+        db.Usuario.create(req.body).then(() => {
+            res.redirect('/home');
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
+
+    async getList(req, res) {
+        db.Usuario.findAll().then(usuarios => {
+            res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
+
+    async getUpdate(req, res) {
+        await db.Usuario.findByPk(req.params.id).then(
+            usuario => res.render('usuario/usuarioUpdate', { usuario: usuario.dataValues })
+        ).catch(function (err) {
+            console.log(err);
+        });
+    },
+
+    async postUpdate(req, res) {
+        await db.Usuario.update(req.body, { where: { id: req.body.id } }).then(() =>
+            res.redirect('/usuarioList') 
+        ).catch(function (err) {
+            console.log(err);
+        });
+    },
+
+    async getDelete(req, res) {
+        await db.Usuario.destroy({ where: { id: req.params.id } }).then(() =>
+            res.redirect('/usuarioList') 
+        ).catch(err => {
+            console.log(err);
+        });
+    }
 }
