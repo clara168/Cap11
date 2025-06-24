@@ -4,12 +4,19 @@ module.exports = {
     async getLogin(req, res) {
         res.render('usuario/login', { layout: 'noMenu.handlebars' });
     },
+
     async postLogin(req, res) {
         const { email, senha_hash } = req.body;
         db.Usuario.findOne({ where: { email: email, senha_hash: senha_hash } })
         .then(usuario => {
             if (usuario) {
-                res.redirect('/home');
+                req.session.usuario = {
+                    id: usuario.id,
+                    nome: usuario.nome,
+                    email: usuario.email
+                };
+                console.log('Sessão criada para o usuário:', req.session.usuario);
+                res.redirect('/home'); 
             } else {
                 res.redirect('/');
             }
@@ -18,11 +25,17 @@ module.exports = {
             res.redirect('/');
         });
     },
-    async getList(req, res) {
-        db.Usuario.findAll().then(usuarios => {
-            res.render('usuario/usuarioList', { usuarios: usuarios.map(user => user.toJSON()) });
-        }).catch((err) => {
-            console.log(err);
+
+    
+    async getLogout(req, res) {
+        req.session.destroy(err => { 
+            if (err) {
+                return console.log(err);
+            }
+            console.log('Sessão destruída.');
+            res.redirect('/'); 
         });
     },
+
+
 }
