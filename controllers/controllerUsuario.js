@@ -3,7 +3,7 @@ const db = require('../config/db_sequelize');
 module.exports = {
     
     async getLogin(req, res) {
-        if (req.session.usuario) {
+         if (req.session.usuario) {
             res.redirect('/home');
         } else {
             res.render('usuario/login', { layout: 'noMenu.handlebars' });
