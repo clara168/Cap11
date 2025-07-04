@@ -1,20 +1,46 @@
-<table border="1px">
-    <tr>
-        <td> Nome </td>
-        <td> Preparo </td>
-        <td> Ingredientes </td>
-        <td> Categoria </td>
-        <td> Editar </td>
-        <td> Deletar </td>
-    </tr>
-    {{#each reservas}}
-    <tr>
-        <td>{{nome}}</td>
-        <td>{{preparo}}</td>
-        <td>{{ingredientes}}</td>
-        <td>{{espacoId}}</td>
-        <td><a href="reservaUpdate/{{id}}">Editar</a></td>
-        <td><a href="reservaDelete/{{id}}">Deletar</a></td>
-    </tr>
-    {{/each}}
-</table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Lista de Reservas</h3>
+        <a href="/reserva/create" class="btn btn-primary">Adicionar Nova Reserva</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Espaço Reservado</th>
+                        <th scope="col">Usuário</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Horário</th>
+                        <th scope="col">Status</th>
+                        {{#if admin}}
+                            <th scope="col" class="text-center">Ações</th>
+                        {{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each reservas}}
+                    <tr>
+                        <td>{{this.espaco.nome}}</td>
+                        <td>{{this.usuario.nome}}</td>
+                        <td>{{this.data_reserva}}</td>
+                        <td>{{this.hora_inicio}} - {{this.hora_fim}}</td>
+                        <td><span class="badge badge-pill badge-info">{{this.status}}</span></td>
+                        {{#if ../admin}}
+                            <td class="text-center">
+                                {{! A rota de update para reservas pode ser adicionada aqui se necessário }}
+                                <a href="/reserva/delete/{{this.id}}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta reserva?');">Deletar</a>
+                            </td>
+                        {{/if}}
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="{{#if admin}}6{{else}}5{{/if}}" class="text-center">Nenhuma reserva encontrada.</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

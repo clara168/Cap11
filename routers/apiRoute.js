@@ -1,7 +1,12 @@
 const express = require('express');
+const { verifyToken, isAdmin } = require('../middlewares/middlewares');
+
 const apiAuthController = require('../controllers/api/apiAuthController');
 const apiEspacoController = require('../controllers/api/apiEspacoController');
-const { verifyToken, isAdmin } = require('../middlewares/middlewares');
+const apiUsuarioController = require('../controllers/api/apiUsuarioController');
+const apiReservaController = require('../controllers/api/apiReservaController');
+const apiCategoriaController = require('../controllers/api/apiCategoriaController');
+
 const route = express.Router();
 
 /**
@@ -39,13 +44,7 @@ route.post('/login', apiAuthController.login);
  *       - bearerAuth: []
  *     responses:
  *       '200':
- *         description: Lista de espaços
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Espaco'
+ *         description: Sucesso
  */
 route.get('/espacos', verifyToken, apiEspacoController.getAll);
 
@@ -65,11 +64,7 @@ route.get('/espacos', verifyToken, apiEspacoController.getAll);
  *           type: integer
  *     responses:
  *       '200':
- *         description: Dados do espaço
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Espaco'
+ *         description: Sucesso
  */
 route.get('/espacos/:id', verifyToken, apiEspacoController.getById);
 
@@ -89,7 +84,7 @@ route.get('/espacos/:id', verifyToken, apiEspacoController.getById);
  *             $ref: '#/components/schemas/Espaco'
  *     responses:
  *       '201':
- *         description: Espaço criado com sucesso
+ *         description: Criado com sucesso
  */
 route.post('/espacos', verifyToken, isAdmin, apiEspacoController.create);
 
@@ -115,7 +110,7 @@ route.post('/espacos', verifyToken, isAdmin, apiEspacoController.create);
  *             $ref: '#/components/schemas/Espaco'
  *     responses:
  *       '200':
- *         description: Espaço atualizado com sucesso
+ *         description: Atualizado com sucesso
  */
 route.put('/espacos/:id', verifyToken, isAdmin, apiEspacoController.update);
 
@@ -138,5 +133,87 @@ route.put('/espacos/:id', verifyToken, isAdmin, apiEspacoController.update);
  *         description: Deletado com sucesso
  */
 route.delete('/espacos/:id', verifyToken, isAdmin, apiEspacoController.delete);
+
+/**
+ * @swagger
+ * /api/reservas:
+ *   get:
+ *     tags: [Reservas]
+ *     summary: Lista todas as reservas
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Sucesso
+ */
+route.get('/reservas', verifyToken, apiReservaController.getAll);
+
+/**
+ * @swagger
+ * /api/reservas:
+ *   post:
+ *     tags: [Reservas]
+ *     summary: Cria uma nova reserva para o usuário autenticado
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reserva'
+ *     responses:
+ *       '201':
+ *         description: Reserva criada com sucesso
+ */
+route.post('/reservas', verifyToken, apiReservaController.create);
+
+/**
+ * @swagger
+ * /api/usuarios:
+ *   get:
+ *     tags: [Usuários]
+ *     summary: Lista todos os usuários (Apenas Admins)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Sucesso
+ */
+route.get('/usuarios', verifyToken, isAdmin, apiUsuarioController.getAll);
+
+/**
+ * @swagger
+ * /api/categorias:
+ *   get:
+ *     tags: [Categorias]
+ *     summary: Lista todas as categorias
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Sucesso
+ */
+route.get('/categorias', verifyToken, apiCategoriaController.getAll);
+
+/**
+ * @swagger
+ * /api/categorias:
+ *   post:
+ *     tags: [Categorias]
+ *     summary: Cria uma nova categoria (Apenas Admins)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Categoria'
+ *     responses:
+ *       '201':
+ *         description: Categoria criada com sucesso
+ */
+route.post('/categorias', verifyToken, isAdmin, apiCategoriaController.create);
 
 module.exports = route;

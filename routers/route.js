@@ -3,12 +3,10 @@ const controllerUsuario = require('../controllers/controllerUsuario');
 const controllerEspaco = require('../controllers/controllerEspaco');
 const controllerReserva = require('../controllers/controllerReserva');
 const controllerLog = require('../controllers/controllerLog');
+const controllerCategoria = require('../controllers/controllerCategoria');
 const route = express.Router();
 
-// Não precisamos mais da função checkSession aqui,
-// pois o middleware global em app.js já faz esse trabalho.
 
-// Rota Home
 route.get("/home", (req, res) => {
     res.render('home');
 });
@@ -37,6 +35,15 @@ route.get("/reserva/create", controllerReserva.getCreate);
 route.post("/reserva/create", controllerReserva.postCreate);
 route.get("/reserva/list", controllerReserva.getList);
 route.get("/reserva/delete/:id", controllerReserva.getDelete);
+
+// --- Rotas de Categoria  ---
+route.get("/categoria/list", controllerCategoria.getList);
+route.get("/categoria/create", controllerCategoria.getCreate);
+route.post("/categoria/create", controllerCategoria.postCreate);
+route.get("/categoria/update/:id", controllerCategoria.getUpdate);
+route.post("/categoria/update", controllerCategoria.postUpdate);
+route.get("/categoria/delete/:id", controllerCategoria.getDelete);
+
 
 // --- Rotas de Log ---
 route.get("/log/list", controllerLog.getList);

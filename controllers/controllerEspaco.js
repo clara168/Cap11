@@ -1,42 +1,75 @@
 const db = require('../config/db_sequelize');
 
 module.exports = {
+
     async getCreate(req, res) {
-        res.render('espaco/espacoCreate');
+        try {
+            res.render('espaco/espacoCreate');
+        } catch (err) {
+            console.log(err);
+        }
     },
+
     async postCreate(req, res) {
-        db.Espaco.create(req.body).then(() => {
-            res.redirect('/home');
-        }).catch((err) => {
+        try {
+            await db.Espaco.create(req.body);
+            res.redirect('/espaco/list');
+        } catch (err) {
             console.log(err);
-        });
+        }
     },
+
     async getList(req, res) {
-        db.Espaco.findAll().then(espacos => {
+        try {
+            const espacos = await db.Espaco.findAll({ include: 'categorias' });
             res.render('espaco/espacoList', { espacos: espacos.map(e => e.toJSON()) });
-        }).catch((err) => {
+        } catch (err) {
             console.log(err);
-        });
+        }
     },
-    async getUpdate(req, res) {
-        await db.Espaco.findByPk(req.params.id).then(
-            espaco => res.render('espaco/espacoUpdate', { espaco: espaco.dataValues })
-        ).catch(function (err) {
-            console.log(err);
-        });
-    },
-    async postUpdate(req, res) {
-        await db.Espaco.update(req.body, { where: { id: req.body.id } }).then(() =>
-            res.redirect('/espaco/list')
-        ).catch(function (err) {
-            console.log(err);
-        });
-    },
+
     async getDelete(req, res) {
-        await db.Espaco.destroy({ where: { id: req.params.id } }).then(() =>
-            res.redirect('/espaco/list')
-        ).catch(err => {
+        try {
+            await db.Espaco.destroy({ where: { id: req.params.id } });
+            res.redirect('/espaco/list');
+        } catch (err) {
             console.log(err);
-        });
+        }
+    },
+
+    async getUpdate(req, res) {
+        try {
+            const espaco = await db.Espaco.findByPk(req.params.id);
+            const todasCategorias = await db.Categoria.findAll();
+            const categoriasAssociadas = await espaco.getCategorias();
+            const idsCategoriasAssociadas = categoriasAssociadas.map(cat => cat.id);
+
+            const categoriasParaView = todasCategorias.map(categoria => {
+                return {
+                    id: categoria.id,
+                    nome: categoria.nome,
+                    isChecked: idsCategoriasAssociadas.includes(categoria.id)
+                }
+            });
+
+            res.render('espaco/espacoUpdate', {
+                espaco: espaco.toJSON(),
+                categorias: categoriasParaView
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    async postUpdate(req, res) {
+        try {
+            const espaco = await db.Espaco.findByPk(req.body.id);
+            await espaco.update(req.body);
+            const idsCategorias = req.body.categorias || [];
+            await espaco.setCategorias(idsCategorias);
+            res.redirect('/espaco/list');
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
+};

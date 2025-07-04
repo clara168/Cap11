@@ -1,6 +1,61 @@
-<form action="/espacoUpdate" method="post">
-    <input type="hidden" name="id" value={{espaco.id}}>
-    Nome: <input type="text" name="nome" value="{{espaco.nome}}">
-    <br> <br>
-    <input type="submit" value="Editar">
-</form>
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header">
+            <h3>Editar Espaço: {{espaco.nome}}</h3>
+        </div>
+        <div class="card-body">
+            {{! A action deve corresponder à sua rota, ex: /espaco/update }}
+            <form action="/espaco/update" method="POST">
+                <input type="hidden" name="id" value="{{espaco.id}}">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nome">Nome do Espaço</label>
+                        <input type="text" class="form-control" id="nome" name="nome" value="{{espaco.nome}}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tipo">Tipo</label>
+                        <input type="text" class="form-control" id="tipo" name="tipo" value="{{espaco.tipo}}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="capacidade">Capacidade</label>
+                        <input type="number" class="form-control" id="capacidade" name="capacidade" value="{{espaco.capacidade}}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="localizacao">Localização</label>
+                        <input type="text" class="form-control" id="localizacao" name="localizacao" value="{{espaco.localizacao}}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="recursos">Recursos</label>
+                    <textarea class="form-control" id="recursos" name="recursos" rows="3">{{espaco.recursos}}</textarea>
+                </div>
+
+                <hr>
+                <h4>Categorias do Espaço</h4>
+                <div class="form-group">
+                    {{#each categorias}}
+                        <div class="form-check form-check-inline">
+                            {{! A lógica agora é muito mais simples! }}
+                            <input class="form-check-input" type="checkbox" name="categorias" value="{{this.id}}" id="cat-{{this.id}}"
+                                {{#if this.isChecked}}checked{{/if}}
+                            >
+                            <label class="form-check-label" for="cat-{{this.id}}">
+                                {{this.nome}}
+                            </label>
+                        </div>
+                    {{else}}
+                        <p class="text-muted">Nenhuma categoria cadastrada.</p>
+                    {{/each}}
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3">Salvar Alterações</button>
+                <a href="/espaco/list" class="btn btn-secondary mt-3">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

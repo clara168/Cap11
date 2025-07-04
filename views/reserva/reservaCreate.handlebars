@@ -1,19 +1,58 @@
-<form action="/reservaCreate" method="post">
-    Nome: <input type="text" name="nome">
-    <br> <br>
-    Ingredientes: <input type="text" name="ingredientes">
-    <br> <br>
-    Preparo: <input type="text" name="preparo">
-    <br> <br>
-    Ingredientes:
-    <select name="espacoId">
-        {{#each espacos}}
-        <tr>
-            <option value={{id}}>{{nome}}</option>
-        </tr>
-        {{/each}}
-    </select>
-    <br> <br>
-    <input type="submit" value="Cadastrar">
-        
-</form>
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header">
+            <h3>Criar Nova Reserva</h3>
+        </div>
+        <div class="card-body">
+            <form action="/reserva/create" method="POST">
+                
+                <div class="form-group">
+                    <label for="espaco_id">Selecione o Espaço</label>
+                    <select class="form-control" id="espaco_id" name="espaco_id" required>
+                        <option value="" disabled selected>Escolha um espaço...</option>
+                        {{#each espacos}}
+                            <option value="{{this.id}}">{{this.nome}} (Capacidade: {{this.capacidade}})</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuario_id">Selecione o Usuário (Responsável)</label>
+                    <select class="form-control" id="usuario_id" name="usuario_id" required>
+                        <option value="" disabled selected>Escolha um usuário...</option>
+                        {{#each usuarios}}
+                            <option value="{{this.id}}">{{this.nome}} - {{this.email}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="data_reserva">Data da Reserva</label>
+                        <input type="date" class="form-control" id="data_reserva" name="data_reserva" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="hora_inicio">Hora de Início</label>
+                        <input type="time" class="form-control" id="hora_inicio" name="hora_inicio" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="hora_fim">Hora de Fim</label>
+                        <input type="time" class="form-control" id="hora_fim" name="hora_fim" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status da Reserva</label>
+                    <select class="form-control" id="status" name="status" required>
+                        <option value="Confirmada" selected>Confirmada</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Salvar Reserva</button>
+                <a href="/home" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
