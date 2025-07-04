@@ -22,6 +22,7 @@ module.exports = {
                 console.log('Tentativa de login com email não cadastrado:', email);
                 return res.redirect('/');
             }
+            console.log(senha_hash, usuario.senha_hash)
 
             const senhaValida = await bcrypt.compare(senha_hash, usuario.senha_hash);
 
