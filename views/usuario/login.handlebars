@@ -1,6 +1,31 @@
-<form action="/login" method="post">
-    Login: <input type="text" name="login" id="login">
-    <br><br>
-    Senha: <input type="password" name="senha">
-    <input type="submit" value="Logar">
-</form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Login no Sistema</h3>
+                    
+                    {{! O action="/login" e method="POST" são essenciais }}
+                    <form action="/login" method="POST">
+                        <div class="form-group">
+                            <label for="emailInput">Email</label>
+                            
+                            {{! O name="email" é a parte mais importante aqui }}
+                            <input type="email" class="form-control" id="emailInput" name="email" placeholder="Digite seu email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="senhaInput">Senha</label>
+                            
+                            {{! O name="senha_hash" é a outra parte importante }}
+                            <input type="password" class="form-control" id="senhaInput" name="senha_hash" placeholder="Digite sua senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-4">Logar</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/usuarioCreate">Ainda não tem uma conta? Cadastre-se</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

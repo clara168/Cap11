@@ -1,20 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sistema de Reservas de Espaços Coletivos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reservas</title>
+    {{! Links do Bootstrap }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <center> 
-        <h1> Sistema de Reservas de Espaços Coletivos </h1>
-        <a href="/usuarioList"> <button>Listar Usuários</button> </a>
-        <a href="/espaco/create"> <button>Cadastrar Espaço</button> </a> 
-        <a href="/espaco/list"> <button>Listar Espaços</button> </a>
-        <a href="/reserva/create"> <button>Cadastrar Reserva</button> </a> 
-        <a href="/reserva/list"> <button>Listar Reservas</button> </a>
-        <a href="/log/list"> <button>Listar Logs de Auditoria</button> </a>
-        <a href="/logout"> <button>Logout</button> </a>
-        <br> <br>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <a class="navbar-brand" href="/home">Reservas Coletivas</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                {{! Itens que todos veem }}
+                <li class="nav-item"><a class="nav-link" href="/espaco/list">Ver Espaços</a></li>
+                <li class="nav-item"><a class="nav-link" href="/reserva/create">Fazer Reserva</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {{#if usuario}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                            Olá, {{usuario.nome}}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            {{#if admin}}
+                                <a class="dropdown-item" href="/usuarioList">Gerenciar Usuários</a>
+                                <a class="dropdown-item" href="/espaco/create">Gerenciar Espaços</a>
+                                <a class="dropdown-item" href="/reserva/list">Gerenciar Reservas</a>
+                                <a class="dropdown-item" href="/log/list">Ver Logs</a>
+                                <div class="dropdown-divider"></div>
+                            {{/if}}
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                {{/if}}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
         {{{body}}}
-    </center>
+    </div>
+
+    {{! Scripts do Bootstrap (jQuery e Popper.js) }}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

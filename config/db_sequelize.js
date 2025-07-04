@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('web2_db', 'postgres', '1234', {
+const sequelize = new Sequelize('web2_db', 'postgres', 'postgresql', {
     host: 'localhost',
     dialect: 'postgres'
 });

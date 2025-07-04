@@ -1,5 +1,5 @@
 const StringCon = {
-        connection:"mongodb+srv://ortoncelli:1234@cluster0.3w89q.mongodb.net/Web2_db?retryWrites=true&w=majority"
+        connection: "mongodb+srv://anaclarasantana:10voGHkbMR9EMAgY@cluster0.igxvrej.mongodb.net/Web2_db?retryWrites=true&w=majority&appName=Cluster0"
     }
 module.exports = StringCon;
     
